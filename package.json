@@ -1,0 +1,9 @@
+{
+  "name": "tina-ai-portfolio",
+  "version": "1.0.0",
+  "description": "TinaRen 的 AI 作品集网站",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site, no build needed'"
+  }
+}
