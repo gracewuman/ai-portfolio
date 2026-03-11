@@ -18,24 +18,14 @@
             overflow-x: hidden;
         }
 
-        /* 动态背景 */
-        .background {
+        /* Vanta 飞鸟动态背景 */
+        #vanta-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            opacity: 0.1;
             z-index: -1;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         /* 容器 */
@@ -56,13 +46,34 @@
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 4px solid transparent;
-            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff, #06ffa5);
-            background-clip: padding-box;
-            padding: 4px;
             margin: 0 auto 30px;
-            animation: avatarGlow 3s ease-in-out infinite;
             position: relative;
+            animation: avatarFloat 4s ease-in-out infinite;
+            cursor: pointer;
+        }
+
+        /* 旋转彩色光晕边框 */
+        .avatar::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b, #ff006e);
+            animation: borderSpin 3s linear infinite;
+            z-index: 0;
+        }
+
+        /* 外层光晕 */
+        .avatar::after {
+            content: '';
+            position: absolute;
+            inset: -12px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff006e, #8338ec, #3a86ff, #06ffa5, #ffbe0b, #ff006e);
+            animation: borderSpin 3s linear infinite reverse;
+            filter: blur(10px);
+            opacity: 0.6;
+            z-index: 0;
         }
 
         .avatar img {
@@ -70,12 +81,25 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            background: #1a1a1a;
+            position: relative;
+            z-index: 1;
+            border: 4px solid #0d0d0d;
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
-        @keyframes avatarGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 110, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(131, 56, 236, 0.8); }
+        .avatar:hover img {
+            transform: scale(1.08);
+            filter: brightness(1.1);
+        }
+
+        @keyframes borderSpin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+
+        @keyframes avatarFloat {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-10px); }
         }
 
         .title {
@@ -306,13 +330,13 @@
     </style>
 </head>
 <body>
-    <div class="background"></div>
+    <div id="vanta-bg"></div>
 
     <div class="container">
         <!-- 头部 -->
         <header class="header">
             <div class="avatar">
-                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ff006e;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%233a86ff;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='100' cy='100' r='100' fill='url(%23grad)'/%3E%3Ctext x='100' y='120' font-size='80' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'%3ET%3C/text%3E%3C/svg%3E" alt="TinaRen">
+                <img src="1mifeng.jpeg" alt="TinaRen">
             </div>
             <h1 class="title">TinaRen 的 AI 作品集</h1>
             <p class="subtitle">欢迎和我一起玩 AI~~</p>
@@ -445,5 +469,26 @@
             <p>© 2026 TinaRen AI Portfolio | Made with ❤️ and AI</p>
         </footer>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
+    <script>
+        VANTA.BIRDS({
+            el: '#vanta-bg',
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            backgroundColor: 0x0a0a0a,
+            color1: 0xff006e,
+            color2: 0x3a86ff,
+            colorMode: 'lerp',
+            birdSize: 1.5,
+            wingSpan: 30,
+            speedLimit: 5,
+            separation: 60,
+            alignment: 40,
+            cohesion: 40,
+            quantity: 4
+        });
+    </script>
 </body>
 </html>
